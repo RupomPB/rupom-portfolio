@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useState, useCallback } from "react";
+import Image from "next/image";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
@@ -33,14 +34,12 @@ import {
 import {
   FinEasePreview,
   StyleDecorPreview,
-  GadgetHubPreview,
+ 
   EdTechPreview,
 } from "@/components/ProjectPreviews";
 
-import {
-  IconGithub,
-  IconLinkedin,
-} from "@/components/TechIcons";
+import { IconGithub, IconLinkedin } from "@/components/TechIcons";
+import { GadgetHubPreview } from "../components/ProjectPreviews";
 
 /* ===================================================================
    ANIMATION VARIANTS
@@ -85,7 +84,9 @@ function SectionHeading({ number, category, title, description }) {
       <div className="flex items-center gap-3 mb-4 font-mono text-xs text-[var(--accent)] tracking-widest uppercase">
         <span className="font-bold">{number}</span>
         <span className="h-px w-8 bg-[var(--accent)]/50" />
-        <span className="text-[var(--text-muted)] tracking-[0.2em]">{category}</span>
+        <span className="text-[var(--text-muted)] tracking-[0.2em]">
+          {category}
+        </span>
       </div>
       <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--text-main)] font-display">
@@ -106,7 +107,11 @@ function SectionHeading({ number, category, title, description }) {
 =================================================================== */
 
 function ContactForm() {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [statusMessage, setStatusMessage] = useState("");
@@ -154,25 +159,35 @@ function ContactForm() {
 
       if (res.ok && data.success) {
         setStatus("success");
-        setStatusMessage(data.message || "Thank you! Your message has been received.");
+        setStatusMessage(
+          data.message || "Thank you! Your message has been received.",
+        );
         setFormData({ name: "", email: "", message: "" });
       } else if (data.errors) {
         setErrors(data.errors);
         setStatus("idle");
       } else {
         setStatus("error");
-        setStatusMessage(data.message || "Failed to deliver message. Please contact directly via email.");
+        setStatusMessage(
+          data.message ||
+            "Failed to deliver message. Please contact directly via email.",
+        );
       }
     } catch {
       setStatus("error");
-      setStatusMessage("Network connection error. Please try again or email rupombadhan111@gmail.com.");
+      setStatusMessage(
+        "Network connection error. Please try again or email rupombadhan111@gmail.com.",
+      );
     }
   };
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-4">
       <div>
-        <label htmlFor="name" className="block font-mono text-[11px] uppercase tracking-wider text-[var(--text-muted)] mb-1.5">
+        <label
+          htmlFor="name"
+          className="block font-mono text-[11px] uppercase tracking-wider text-[var(--text-muted)] mb-1.5"
+        >
           Full Name <span className="text-[var(--accent)]">*</span>
         </label>
         <input
@@ -187,11 +202,16 @@ function ContactForm() {
             errors.name ? "border-rose-500/60" : "border-[var(--border-subtle)]"
           }`}
         />
-        {errors.name && <p className="mt-1 font-mono text-xs text-rose-400">{errors.name}</p>}
+        {errors.name && (
+          <p className="mt-1 font-mono text-xs text-rose-400">{errors.name}</p>
+        )}
       </div>
 
       <div>
-        <label htmlFor="email" className="block font-mono text-[11px] uppercase tracking-wider text-[var(--text-muted)] mb-1.5">
+        <label
+          htmlFor="email"
+          className="block font-mono text-[11px] uppercase tracking-wider text-[var(--text-muted)] mb-1.5"
+        >
           Email Address <span className="text-[var(--accent)]">*</span>
         </label>
         <input
@@ -203,14 +223,21 @@ function ContactForm() {
           onChange={handleChange}
           aria-invalid={!!errors.email}
           className={`w-full rounded-xl border bg-[var(--surface-base)]/60 px-4 py-3 text-sm text-[var(--text-main)] placeholder-[var(--text-faint)] outline-none transition focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] ${
-            errors.email ? "border-rose-500/60" : "border-[var(--border-subtle)]"
+            errors.email
+              ? "border-rose-500/60"
+              : "border-[var(--border-subtle)]"
           }`}
         />
-        {errors.email && <p className="mt-1 font-mono text-xs text-rose-400">{errors.email}</p>}
+        {errors.email && (
+          <p className="mt-1 font-mono text-xs text-rose-400">{errors.email}</p>
+        )}
       </div>
 
       <div>
-        <label htmlFor="message" className="block font-mono text-[11px] uppercase tracking-wider text-[var(--text-muted)] mb-1.5">
+        <label
+          htmlFor="message"
+          className="block font-mono text-[11px] uppercase tracking-wider text-[var(--text-muted)] mb-1.5"
+        >
           Message <span className="text-[var(--accent)]">*</span>
         </label>
         <textarea
@@ -222,10 +249,16 @@ function ContactForm() {
           onChange={handleChange}
           aria-invalid={!!errors.message}
           className={`w-full rounded-xl border bg-[var(--surface-base)]/60 px-4 py-3 text-sm text-[var(--text-main)] placeholder-[var(--text-faint)] outline-none transition focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] resize-none ${
-            errors.message ? "border-rose-500/60" : "border-[var(--border-subtle)]"
+            errors.message
+              ? "border-rose-500/60"
+              : "border-[var(--border-subtle)]"
           }`}
         />
-        {errors.message && <p className="mt-1 font-mono text-xs text-rose-400">{errors.message}</p>}
+        {errors.message && (
+          <p className="mt-1 font-mono text-xs text-rose-400">
+            {errors.message}
+          </p>
+        )}
       </div>
 
       <button
@@ -235,7 +268,8 @@ function ContactForm() {
       >
         {status === "loading" ? (
           <span className="flex items-center gap-2">
-            <Loader2 size={16} className="animate-spin" /> Transmitting Message...
+            <Loader2 size={16} className="animate-spin" /> Transmitting
+            Message...
           </span>
         ) : status === "success" ? (
           <span className="flex items-center gap-2">
@@ -260,7 +294,11 @@ function ContactForm() {
                 : "border-rose-500/30 bg-rose-500/10 text-rose-400"
             }`}
           >
-            {status === "success" ? <Check size={16} className="shrink-0 mt-0.5" /> : <X size={16} className="shrink-0 mt-0.5" />}
+            {status === "success" ? (
+              <Check size={16} className="shrink-0 mt-0.5" />
+            ) : (
+              <X size={16} className="shrink-0 mt-0.5" />
+            )}
             <span>{statusMessage}</span>
           </motion.div>
         )}
@@ -320,7 +358,7 @@ export default function Home() {
           }
         });
       },
-      { rootMargin: "-30% 0px -60% 0px" }
+      { rootMargin: "-30% 0px -60% 0px" },
     );
 
     sectionIds.forEach((id) => {
@@ -356,14 +394,12 @@ export default function Home() {
       >
         <div className="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between">
           {/* Brand Logo */}
-          <a href="#home" className="group flex items-center gap-3 text-decoration-none">
-            <span className="size-10 rounded-xl border border-[var(--accent)]/30 bg-[var(--accent-soft)] flex items-center justify-center font-display font-bold text-sm text-[var(--accent)] transition duration-300 group-hover:scale-105 group-hover:border-[var(--accent)] shadow-sm">
-              RPB
-            </span>
+          <a href="#home" className="group flex items-center gap-3">
             <div className="flex flex-col">
               <span className="font-display font-bold text-sm tracking-wider text-[var(--text-main)]">
                 RUPOM<span className="text-[var(--accent)]">.</span>
               </span>
+
               <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--text-muted)]">
                 Frontend Developer
               </span>
@@ -379,7 +415,9 @@ export default function Home() {
                   key={link.href}
                   href={link.href}
                   className={`relative px-4 py-1.5 rounded-full text-xs font-medium transition-colors duration-200 ${
-                    isActive ? "text-[var(--accent)] font-semibold" : "text-[var(--text-muted)] hover:text-[var(--text-main)]"
+                    isActive
+                      ? "text-[var(--accent)] font-semibold"
+                      : "text-[var(--text-muted)] hover:text-[var(--text-main)]"
                   }`}
                 >
                   {link.label}
@@ -387,7 +425,11 @@ export default function Home() {
                     <motion.span
                       layoutId="nav-active-pill"
                       className="absolute inset-0 rounded-full bg-[var(--accent-soft)] -z-10 border border-[var(--accent)]/30"
-                      transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 350,
+                        damping: 30,
+                      }}
                     />
                   )}
                 </a>
@@ -406,7 +448,10 @@ export default function Home() {
               {theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}
             </button>
 
-            <a href="#contact" className="hidden sm:inline-flex btn-primary text-xs py-2.5 px-4 font-semibold">
+            <a
+              href="#contact"
+              className="hidden sm:inline-flex btn-primary text-xs py-2.5 px-4 font-semibold"
+            >
               Let&apos;s Talk <ArrowUpRight size={14} />
             </a>
 
@@ -451,13 +496,14 @@ export default function Home() {
 
       {/* ── MAIN CONTENT ── */}
       <main className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 pt-24">
-
         {/* ================================================================
             01. HERO SECTION — PORTRAIT LEFT, INTRODUCTION RIGHT
         ================================================================ */}
-        <section id="home" className="min-h-[85vh] flex items-center py-12 lg:py-20 scroll-mt-24">
+        <section
+          id="home"
+          className="min-h-[85vh] flex items-center py-12 lg:py-20 scroll-mt-24"
+        >
           <div className="grid w-full items-center gap-12 lg:grid-cols-[0.88fr_1.12fr]">
-            
             {/* ── LEFT: PORTRAIT FRAME COMPOSITION ── */}
             <motion.div
               initial={{ opacity: 0, scale: 0.94 }}
@@ -472,7 +518,10 @@ export default function Home() {
               />
               <div
                 className="absolute -inset-12 rounded-full border border-dashed border-[var(--border-subtle)] pointer-events-none animate-spin"
-                style={{ animationDuration: "75s", animationDirection: "reverse" }}
+                style={{
+                  animationDuration: "75s",
+                  animationDirection: "reverse",
+                }}
               />
 
               {/* Multi-Layer Portrait Container */}
@@ -486,15 +535,19 @@ export default function Home() {
                 {/* Inner Window Chrome Header */}
                 <div className="flex items-center justify-between border-b border-[var(--border-subtle)] px-3 py-2 text-[10px] font-mono text-[var(--text-faint)]">
                   <span>RPB // PORTRAIT_MATRIX</span>
-                  <span className="text-[var(--accent)] font-semibold">{HERO_DATA.coordinates}</span>
+                  <span className="text-[var(--accent)] font-semibold">
+                    {HERO_DATA.coordinates}
+                  </span>
                 </div>
 
                 {/* Portrait Canvas */}
                 <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-gradient-to-br from-[var(--surface-elevated)] to-[var(--bg-mid)] flex items-center justify-center">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="/images/profile.png"
-                    alt="Rupom Prosad Badhan portrait"
+                    src="https://res.cloudinary.com/rbbaon9j/image/upload/f_auto,q_auto/Rupom-panjabi"
+                    alt="Rupom"
+                    width={500}
+                    height={500}
                     className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                     onError={(e) => {
                       e.target.style.display = "none";
@@ -505,7 +558,9 @@ export default function Home() {
                     style={{ display: "none" }}
                     className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-gradient-to-br from-[var(--surface-elevated)] to-[var(--surface-base)]"
                   >
-                    <span className="font-display text-7xl font-bold tracking-tight text-[var(--accent)]">RPB</span>
+                    <span className="font-display text-7xl font-bold tracking-tight text-[var(--accent)]">
+                      RPB
+                    </span>
                     <span className="mt-3 font-mono text-xs uppercase tracking-widest text-[var(--text-muted)]">
                       Frontend Developer
                     </span>
@@ -514,9 +569,12 @@ export default function Home() {
 
                 {/* Bottom Frame Status Strip */}
                 <div className="mt-2.5 pt-2 border-t border-[var(--border-subtle)] px-2 flex items-center justify-between text-[10px] font-mono">
-                  <span className="text-[var(--text-muted)]">IDENTITY: VERIFIED</span>
+                  <span className="text-[var(--text-muted)]">
+                    IDENTITY: VERIFIED
+                  </span>
                   <span className="inline-flex items-center gap-1.5 text-emerald-400 font-semibold">
-                    <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" /> ACTIVE ROLE
+                    <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />{" "}
+                    ACTIVE ROLE
                   </span>
                 </div>
               </div>
@@ -524,29 +582,45 @@ export default function Home() {
               {/* Floating Technical Badges */}
               <motion.div
                 animate={reducedMotion ? {} : { y: [0, -8, 0] }}
-                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                  duration: 4.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
                 className="absolute -top-3 -right-4 rounded-xl border border-[var(--border-mid)] bg-[var(--surface-glass)] backdrop-blur-xl p-2.5 px-3.5 shadow-xl flex items-center gap-2.5"
               >
                 <span className="size-7 rounded-lg bg-[var(--accent-soft)] text-[var(--accent)] flex items-center justify-center">
                   <Code2 size={16} />
                 </span>
                 <div>
-                  <span className="block font-mono text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Specialization</span>
-                  <span className="block text-xs font-bold text-[var(--text-main)]">React & Next.js</span>
+                  <span className="block font-mono text-[9px] uppercase tracking-wider text-[var(--text-muted)]">
+                    Specialization
+                  </span>
+                  <span className="block text-xs font-bold text-[var(--text-main)]">
+                    React & Next.js
+                  </span>
                 </div>
               </motion.div>
 
               <motion.div
                 animate={reducedMotion ? {} : { y: [0, 8, 0] }}
-                transition={{ duration: 5.2, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                  duration: 5.2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
                 className="absolute -bottom-4 -left-4 rounded-xl border border-[var(--border-mid)] bg-[var(--surface-glass)] backdrop-blur-xl p-2.5 px-3.5 shadow-xl flex items-center gap-2.5"
               >
                 <span className="size-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
                   <Zap size={15} />
                 </span>
                 <div>
-                  <span className="block font-mono text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Internship</span>
-                  <span className="block text-xs font-bold text-[var(--text-main)]">EVU Ventures</span>
+                  <span className="block font-mono text-[9px] uppercase tracking-wider text-[var(--text-muted)]">
+                    Internship
+                  </span>
+                  <span className="block text-xs font-bold text-[var(--text-main)]">
+                    EVU Ventures
+                  </span>
                 </div>
               </motion.div>
             </motion.div>
@@ -559,28 +633,45 @@ export default function Home() {
               className="flex flex-col items-start"
             >
               {/* Status Pill Indicator */}
-              <motion.div variants={fadeUpVariant} className="inline-flex items-center gap-2.5 rounded-full border border-[var(--accent-border)] bg-[var(--accent-soft)] px-3.5 py-1 text-xs font-mono text-[var(--accent)] mb-6">
+              <motion.div
+                variants={fadeUpVariant}
+                className="inline-flex items-center gap-2.5 rounded-full border border-[var(--accent-border)] bg-[var(--accent-soft)] px-3.5 py-1 text-xs font-mono text-[var(--accent)] mb-6"
+              >
                 <span className="size-2 rounded-full bg-[var(--accent)] animate-ping" />
                 <span className="font-semibold">{HERO_DATA.internship}</span>
               </motion.div>
 
               {/* Name & Identity */}
-              <motion.div variants={fadeUpVariant} className="font-mono text-xs uppercase tracking-[0.25em] text-[var(--text-muted)] mb-3">
+              <motion.div
+                variants={fadeUpVariant}
+                className="font-mono text-xs uppercase tracking-[0.25em] text-[var(--text-muted)] mb-3"
+              >
                 HELLO, I AM {HERO_DATA.name.toUpperCase()}
               </motion.div>
 
               {/* High-Impact Editorial Heading */}
-              <motion.h1 variants={fadeUpVariant} className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--text-main)] font-display leading-[1.08] mb-6">
-                Building <span className="text-[var(--accent)]">thoughtful</span> digital experiences with modern web technologies.
+              <motion.h1
+                variants={fadeUpVariant}
+                className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--text-main)] font-display leading-[1.08] mb-6"
+              >
+                Building{" "}
+                <span className="text-[var(--accent)]">thoughtful</span> digital
+                experiences with modern web technologies.
               </motion.h1>
 
               {/* Concise Narrative */}
-              <motion.p variants={fadeUpVariant} className="text-base sm:text-lg text-[var(--text-muted)] leading-relaxed max-w-xl mb-8 font-body">
+              <motion.p
+                variants={fadeUpVariant}
+                className="text-base sm:text-lg text-[var(--text-muted)] leading-relaxed max-w-xl mb-8 font-body"
+              >
                 {HERO_DATA.subheadline}
               </motion.p>
 
               {/* Action Buttons */}
-              <motion.div variants={fadeUpVariant} className="flex flex-wrap items-center gap-3.5 mb-10">
+              <motion.div
+                variants={fadeUpVariant}
+                className="flex flex-wrap items-center gap-3.5 mb-10"
+              >
                 <a href="#projects" className="btn-primary text-sm py-3 px-6">
                   Explore My Work <ArrowUpRight size={16} />
                 </a>
@@ -593,12 +684,16 @@ export default function Home() {
                   className="btn-secondary text-sm py-3 px-6 border-[var(--accent)]/40 hover:border-[var(--accent)]"
                   aria-label="Download Rupom Prosad Badhan Resume PDF"
                 >
-                  <Download size={15} className="text-[var(--accent)]" /> Download Resume
+                  <Download size={15} className="text-[var(--accent)]" />{" "}
+                  Download Resume
                 </a>
               </motion.div>
 
               {/* Social Channels & Online Presence */}
-              <motion.div variants={fadeUpVariant} className="flex items-center gap-3 pt-6 border-t border-[var(--border-subtle)] w-full">
+              <motion.div
+                variants={fadeUpVariant}
+                className="flex items-center gap-3 pt-6 border-t border-[var(--border-subtle)] w-full"
+              >
                 <a
                   href="https://github.com/RupomPB"
                   target="_blank"
@@ -625,17 +720,21 @@ export default function Home() {
                   <Mail size={18} />
                 </a>
                 <span className="h-px w-8 bg-[var(--border-mid)] ml-2" />
-                <span className="font-mono text-xs text-[var(--text-muted)]">Verified Developer Channels</span>
+                <span className="font-mono text-xs text-[var(--text-muted)]">
+                  Verified Developer Channels
+                </span>
               </motion.div>
             </motion.div>
-
           </div>
         </section>
 
         {/* ================================================================
             02. ABOUT ME SECTION — EDITORIAL EXCELLENCE
         ================================================================ */}
-        <section id="about" className="py-20 lg:py-28 scroll-mt-24 border-t border-[var(--border-subtle)]">
+        <section
+          id="about"
+          className="py-20 lg:py-28 scroll-mt-24 border-t border-[var(--border-subtle)]"
+        >
           <SectionHeading
             number="01"
             category="The Person Behind The Pixels"
@@ -651,57 +750,103 @@ export default function Home() {
               </div>
 
               <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--text-main)] font-display leading-snug">
-                Not just assembling layouts. Creating digital products that feel intuitive, responsive, and purposeful.
+                Not just assembling layouts. Creating digital products that feel
+                intuitive, responsive, and purposeful.
               </h3>
 
               <p className="text-base text-[var(--text-muted)] leading-relaxed">
-                I am a frontend developer specializing in React and Next.js, with practical full-stack project experience spanning Node.js, Express, and MongoDB. I focus on creating responsive interfaces that balance visual clarity with underlying performance.
+                I am a frontend developer specializing in React and Next.js,
+                with practical full-stack project experience spanning Node.js,
+                Express, and MongoDB. I focus on creating responsive interfaces
+                that balance visual clarity with underlying performance.
               </p>
 
               <p className="text-base text-[var(--text-muted)] leading-relaxed">
-                My approach combines thoughtful component hierarchy, design token systems, and practical database/API integrations. Whether refining interaction details or implementing secure authentication pipelines, I am dedicated to continuous learning, engineering discipline, and creating products that matter.
+                My approach combines thoughtful component hierarchy, design
+                token systems, and practical database/API integrations. Whether
+                refining interaction details or implementing secure
+                authentication pipelines, I am dedicated to continuous learning,
+                engineering discipline, and creating products that matter.
               </p>
 
               {/* Quick Pillars */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-[var(--border-subtle)]">
                 <div className="p-3 rounded-xl bg-[var(--surface-base)]/50 border border-[var(--border-subtle)]">
-                  <span className="block font-mono text-[10px] text-[var(--accent)] font-bold">100% MODERN</span>
-                  <span className="text-xs font-semibold text-[var(--text-main)]">React & Next.js</span>
+                  <span className="block font-mono text-[10px] text-[var(--accent)] font-bold">
+                    100% MODERN
+                  </span>
+                  <span className="text-xs font-semibold text-[var(--text-main)]">
+                    React & Next.js
+                  </span>
                 </div>
                 <div className="p-3 rounded-xl bg-[var(--surface-base)]/50 border border-[var(--border-subtle)]">
-                  <span className="block font-mono text-[10px] text-[var(--accent)] font-bold">FULL-STACK</span>
-                  <span className="text-xs font-semibold text-[var(--text-main)]">Express & MongoDB</span>
+                  <span className="block font-mono text-[10px] text-[var(--accent)] font-bold">
+                    FULL-STACK
+                  </span>
+                  <span className="text-xs font-semibold text-[var(--text-main)]">
+                    Express & MongoDB
+                  </span>
                 </div>
                 <div className="p-3 rounded-xl bg-[var(--surface-base)]/50 border border-[var(--border-subtle)]">
-                  <span className="block font-mono text-[10px] text-[var(--accent)] font-bold">MOTION</span>
-                  <span className="text-xs font-semibold text-[var(--text-main)]">Framer Motion</span>
+                  <span className="block font-mono text-[10px] text-[var(--accent)] font-bold">
+                    MOTION
+                  </span>
+                  <span className="text-xs font-semibold text-[var(--text-main)]">
+                    Framer Motion
+                  </span>
                 </div>
               </div>
             </Reveal>
 
             {/* Asymmetric Side Pillars */}
             <div className="space-y-4">
-              <Reveal delay={0.1} className="obscura-card p-6 border-l-4 border-l-[var(--accent)]">
-                <span className="font-mono text-xs text-[var(--accent)] font-semibold">01 / PHILOSOPHY</span>
-                <h4 className="text-lg font-bold text-[var(--text-main)] mt-2 font-display">Design with Purpose</h4>
+              <Reveal
+                delay={0.1}
+                className="obscura-card p-6 border-l-4 border-l-[var(--accent)]"
+              >
+                <span className="font-mono text-xs text-[var(--accent)] font-semibold">
+                  01 / PHILOSOPHY
+                </span>
+                <h4 className="text-lg font-bold text-[var(--text-main)] mt-2 font-display">
+                  Design with Purpose
+                </h4>
                 <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-2 leading-relaxed">
-                  Clear typography hierarchy, intentional spacing, accessibility standards, and responsive adaptability across every device viewport.
+                  Clear typography hierarchy, intentional spacing, accessibility
+                  standards, and responsive adaptability across every device
+                  viewport.
                 </p>
               </Reveal>
 
-              <Reveal delay={0.16} className="obscura-card p-6 border-l-4 border-l-emerald-400">
-                <span className="font-mono text-xs text-emerald-400 font-semibold">02 / CRAFT</span>
-                <h4 className="text-lg font-bold text-[var(--text-main)] mt-2 font-display">Continuous Development</h4>
+              <Reveal
+                delay={0.16}
+                className="obscura-card p-6 border-l-4 border-l-emerald-400"
+              >
+                <span className="font-mono text-xs text-emerald-400 font-semibold">
+                  02 / CRAFT
+                </span>
+                <h4 className="text-lg font-bold text-[var(--text-main)] mt-2 font-display">
+                  Continuous Development
+                </h4>
                 <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-2 leading-relaxed">
-                  Actively learning through production work at EVU Ventures, rigorous personal projects, and modern frontend architecture patterns.
+                  Actively learning through production work at EVU Ventures,
+                  rigorous personal projects, and modern frontend architecture
+                  patterns.
                 </p>
               </Reveal>
 
-              <Reveal delay={0.22} className="obscura-card p-6 border-l-4 border-l-teal-400">
-                <span className="font-mono text-xs text-teal-400 font-semibold">03 / COLLABORATION</span>
-                <h4 className="text-lg font-bold text-[var(--text-main)] mt-2 font-display">Engineering Precision</h4>
+              <Reveal
+                delay={0.22}
+                className="obscura-card p-6 border-l-4 border-l-teal-400"
+              >
+                <span className="font-mono text-xs text-teal-400 font-semibold">
+                  03 / COLLABORATION
+                </span>
+                <h4 className="text-lg font-bold text-[var(--text-main)] mt-2 font-display">
+                  Engineering Precision
+                </h4>
                 <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-2 leading-relaxed">
-                  Writing clean, self-documenting code, structuring modular reusable components, and maintaining rigorous Git workflows.
+                  Writing clean, self-documenting code, structuring modular
+                  reusable components, and maintaining rigorous Git workflows.
                 </p>
               </Reveal>
             </div>
@@ -711,7 +856,10 @@ export default function Home() {
         {/* ================================================================
             03. TECHNICAL SKILLS — AUTHENTIC LOGOS & INTERACTIVE CARDS
         ================================================================ */}
-        <section id="skills" className="py-20 lg:py-28 scroll-mt-24 border-t border-[var(--border-subtle)]">
+        <section
+          id="skills"
+          className="py-20 lg:py-28 scroll-mt-24 border-t border-[var(--border-subtle)]"
+        >
           <SectionHeading
             number="02"
             category="Technical Stack & Capabilities"
@@ -721,7 +869,11 @@ export default function Home() {
 
           <div className="space-y-12">
             {SKILL_CATEGORIES.map((category, catIdx) => (
-              <Reveal key={category.id} delay={catIdx * 0.08} className="space-y-4">
+              <Reveal
+                key={category.id}
+                delay={catIdx * 0.08}
+                className="space-y-4"
+              >
                 {/* Category Header */}
                 <div className="flex flex-wrap items-center justify-between border-b border-[var(--border-subtle)] pb-3">
                   <div className="flex items-center gap-3">
@@ -744,8 +896,14 @@ export default function Home() {
                     return (
                       <motion.div
                         key={skill.name}
-                        whileHover={reducedMotion ? {} : { y: -5, scale: 1.015 }}
-                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                        whileHover={
+                          reducedMotion ? {} : { y: -5, scale: 1.015 }
+                        }
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 20,
+                        }}
                         className="group relative rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 transition-all duration-300 hover:border-[var(--accent-border)] hover:shadow-xl hover:shadow-[var(--accent-glow)]/10"
                       >
                         <div className="flex items-start gap-3.5">
@@ -771,9 +929,7 @@ export default function Home() {
                         </div>
 
                         {/* Subtle Bottom Accent Indicator */}
-                        <div
-                          className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                        />
+                        <div className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                       </motion.div>
                     );
                   })}
@@ -786,7 +942,10 @@ export default function Home() {
         {/* ================================================================
             04. FEATURED PROJECTS — ADVANCED VISUAL SHOWCASES
         ================================================================ */}
-        <section id="projects" className="py-20 lg:py-28 scroll-mt-24 border-t border-[var(--border-subtle)]">
+        <section
+          id="projects"
+          className="py-20 lg:py-28 scroll-mt-24 border-t border-[var(--border-subtle)]"
+        >
           <SectionHeading
             number="03"
             category="Selected Digital Products"
@@ -801,13 +960,18 @@ export default function Home() {
                   {/* Card Top Meta Bar */}
                   <div className="flex flex-wrap items-center justify-between border-b border-[var(--border-subtle)] bg-[var(--surface-base)]/40 px-6 py-3.5 text-xs font-mono">
                     <div className="flex items-center gap-3">
-                      <span className="text-[var(--accent)] font-bold">PROJECT {project.number}</span>
+                      <span className="text-[var(--accent)] font-bold">
+                        PROJECT {project.number}
+                      </span>
                       <span className="text-[var(--border-mid)]">/</span>
-                      <span className="text-[var(--text-muted)] uppercase tracking-wider">{project.category}</span>
+                      <span className="text-[var(--text-muted)] uppercase tracking-wider">
+                        {project.category}
+                      </span>
                     </div>
                     {project.wip ? (
                       <span className="inline-flex items-center gap-1.5 text-amber-400 font-semibold text-[11px]">
-                        <span className="size-2 rounded-full bg-amber-400 animate-ping" /> {project.badge}
+                        <span className="size-2 rounded-full bg-amber-400 animate-ping" />{" "}
+                        {project.badge}
                       </span>
                     ) : (
                       <span className="text-emerald-400 font-semibold text-[11px] flex items-center gap-1">
@@ -818,7 +982,6 @@ export default function Home() {
 
                   {/* Two Column Grid: Visual Preview vs Content */}
                   <div className="grid lg:grid-cols-2 gap-8 p-6 sm:p-10 items-center">
-                    
                     {/* Visual Preview Interface */}
                     <div className="order-2 lg:order-1">
                       {project.id === "finease" && <FinEasePreview />}
@@ -852,8 +1015,14 @@ export default function Home() {
                         </span>
                         <div className="space-y-1.5">
                           {project.features.map((feat, fIdx) => (
-                            <div key={fIdx} className="flex items-start gap-2 text-xs sm:text-sm text-[var(--text-main)]">
-                              <Check size={14} className="text-[var(--accent)] shrink-0 mt-0.5" />
+                            <div
+                              key={fIdx}
+                              className="flex items-start gap-2 text-xs sm:text-sm text-[var(--text-main)]"
+                            >
+                              <Check
+                                size={14}
+                                className="text-[var(--accent)] shrink-0 mt-0.5"
+                              />
                               <span>{feat}</span>
                             </div>
                           ))}
@@ -933,7 +1102,6 @@ export default function Home() {
                         )}
                       </div>
                     </div>
-
                   </div>
                 </article>
               </Reveal>
@@ -944,7 +1112,10 @@ export default function Home() {
         {/* ================================================================
             05. EXPERIENCE & LEARNING — TIMELINE SYSTEM
         ================================================================ */}
-        <section id="experience" className="py-20 lg:py-28 scroll-mt-24 border-t border-[var(--border-subtle)]">
+        <section
+          id="experience"
+          className="py-20 lg:py-28 scroll-mt-24 border-t border-[var(--border-subtle)]"
+        >
           <SectionHeading
             number="04"
             category="Career & Education"
@@ -969,7 +1140,8 @@ export default function Home() {
                       </span>
                       {exp.current && (
                         <span className="inline-flex items-center gap-1 font-mono text-[9px] uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
-                          <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" /> CURRENT ROLE
+                          <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />{" "}
+                          CURRENT ROLE
                         </span>
                       )}
                     </div>
@@ -988,8 +1160,14 @@ export default function Home() {
 
                   <div className="space-y-1.5 pt-2">
                     {exp.highlights.map((point, pIdx) => (
-                      <div key={pIdx} className="flex items-start gap-2 text-xs sm:text-sm text-[var(--text-main)]">
-                        <Check size={14} className="text-[var(--accent)] shrink-0 mt-0.5" />
+                      <div
+                        key={pIdx}
+                        className="flex items-start gap-2 text-xs sm:text-sm text-[var(--text-main)]"
+                      >
+                        <Check
+                          size={14}
+                          className="text-[var(--accent)] shrink-0 mt-0.5"
+                        />
                         <span>{point}</span>
                       </div>
                     ))}
@@ -997,7 +1175,10 @@ export default function Home() {
 
                   <div className="flex flex-wrap gap-2 pt-3">
                     {exp.tech.map((t, tIdx) => (
-                      <span key={tIdx} className="font-mono text-[10px] text-[var(--text-muted)] bg-[var(--surface-base)] px-2.5 py-1 rounded-md border border-[var(--border-subtle)]">
+                      <span
+                        key={tIdx}
+                        className="font-mono text-[10px] text-[var(--text-muted)] bg-[var(--surface-base)] px-2.5 py-1 rounded-md border border-[var(--border-subtle)]"
+                      >
                         {t}
                       </span>
                     ))}
@@ -1011,7 +1192,10 @@ export default function Home() {
         {/* ================================================================
             06. CONTACT LOUNGE & SECURE RESEND INTEGRATION
         ================================================================ */}
-        <section id="contact" className="py-20 lg:py-28 scroll-mt-24 border-t border-[var(--border-subtle)]">
+        <section
+          id="contact"
+          className="py-20 lg:py-28 scroll-mt-24 border-t border-[var(--border-subtle)]"
+        >
           <SectionHeading
             number="05"
             category="Get in Touch"
@@ -1028,7 +1212,9 @@ export default function Home() {
                     Available for Immediate Opportunities
                   </h3>
                   <p className="mt-2 text-sm text-[var(--text-muted)] leading-relaxed">
-                    Have an interesting project, a frontend engineering role, or a contract collaboration? Reach out through any of these verified direct channels.
+                    Have an interesting project, a frontend engineering role, or
+                    a contract collaboration? Reach out through any of these
+                    verified direct channels.
                   </p>
                 </div>
 
@@ -1039,8 +1225,16 @@ export default function Home() {
                       <a
                         key={method.id}
                         href={method.href}
-                        target={method.href.startsWith("mailto") ? undefined : "_blank"}
-                        rel={method.href.startsWith("mailto") ? undefined : "noopener noreferrer"}
+                        target={
+                          method.href.startsWith("mailto")
+                            ? undefined
+                            : "_blank"
+                        }
+                        rel={
+                          method.href.startsWith("mailto")
+                            ? undefined
+                            : "noopener noreferrer"
+                        }
                         className="group flex items-center justify-between p-3.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-base)]/50 transition-all duration-300 hover:border-[var(--accent)] hover:bg-[var(--accent-soft)]/20"
                       >
                         <div className="flex items-center gap-3.5">
@@ -1066,7 +1260,9 @@ export default function Home() {
 
                 <div className="pt-2 border-t border-[var(--border-subtle)] font-mono text-xs text-[var(--text-muted)] flex items-center justify-between">
                   <span>Based in Dhaka, Bangladesh</span>
-                  <span className="text-emerald-400">Response: &lt; 24 Hours</span>
+                  <span className="text-emerald-400">
+                    Response: &lt; 24 Hours
+                  </span>
                 </div>
               </div>
             </Reveal>
@@ -1087,7 +1283,6 @@ export default function Home() {
             </Reveal>
           </div>
         </section>
-
       </main>
 
       {/* ================================================================
@@ -1105,7 +1300,8 @@ export default function Home() {
           </div>
 
           <div className="font-mono text-xs text-[var(--text-muted)] text-center">
-            © {new Date().getFullYear()} Rupom Prosad Badhan. Built with Next.js & Tailwind CSS.
+            © {new Date().getFullYear()} Rupom Prosad Badhan. Built with Next.js
+            & Tailwind CSS.
           </div>
 
           <div className="flex items-center gap-3">
