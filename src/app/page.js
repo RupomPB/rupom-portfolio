@@ -34,7 +34,6 @@ import {
 import {
   FinEasePreview,
   StyleDecorPreview,
- 
   EdTechPreview,
 } from "@/components/ProjectPreviews";
 
@@ -371,6 +370,13 @@ export default function Home() {
 
   const closeMobileMenu = useCallback(() => setMobileMenuOpen(false), []);
 
+  const handleNavClick = useCallback((href) => {
+    const sectionId = href.replace("#", "");
+
+    setActiveSection(sectionId);
+    setMobileMenuOpen(false);
+  }, []);
+
   if (!mounted) return null;
 
   return (
@@ -407,24 +413,28 @@ export default function Home() {
           </a>
 
           {/* Desktop Navigation Links */}
+
+          {/* Desktop Navigation Links */}
           <nav className="hidden lg:flex items-center gap-1 p-1 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-glass)] backdrop-blur-md px-3 shadow-inner">
             {NAV_LINKS.map((link) => {
               const isActive = activeSection === link.href.replace("#", "");
+
               return (
                 <a
                   key={link.href}
                   href={link.href}
-                  className={`relative px-4 py-1.5 rounded-full text-xs font-medium transition-colors duration-200 ${
+                  onClick={() => handleNavClick(link.href)}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`relative isolate px-4 py-1.5 rounded-full text-xs font-medium border transition-all duration-300 ${
                     isActive
-                      ? "text-[var(--accent)] font-semibold"
-                      : "text-[var(--text-muted)] hover:text-[var(--text-main)]"
+                      ? "text-[var(--accent)] font-semibold border-[var(--accent)]/30"
+                      : "text-[var(--text-muted)] border-transparent hover:text-[var(--text-main)]"
                   }`}
                 >
-                  {link.label}
                   {isActive && (
                     <motion.span
                       layoutId="nav-active-pill"
-                      className="absolute inset-0 rounded-full bg-[var(--accent-soft)] -z-10 border border-[var(--accent)]/30"
+                      className="absolute inset-0 z-0 rounded-full bg-[var(--accent-soft)]"
                       transition={{
                         type: "spring",
                         stiffness: 350,
@@ -432,6 +442,8 @@ export default function Home() {
                       }}
                     />
                   )}
+
+                  <span className="relative z-10">{link.label}</span>
                 </a>
               );
             })}
@@ -477,17 +489,32 @@ export default function Home() {
               className="lg:hidden border-b border-[var(--border-subtle)] bg-[var(--surface-glass)] backdrop-blur-2xl px-6 py-4"
             >
               <nav className="flex flex-col gap-1">
-                {NAV_LINKS.map((link) => (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    onClick={closeMobileMenu}
-                    className="flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-medium text-[var(--text-muted)] hover:text-[var(--accent)] hover:bg-[var(--accent-soft)] transition"
-                  >
-                    <span>{link.label}</span>
-                    <ArrowUpRight size={14} className="opacity-60" />
-                  </a>
-                ))}
+                {NAV_LINKS.map((link) => {
+                  const isActive = activeSection === link.href.replace("#", "");
+
+                  return (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => handleNavClick(link.href)}
+                      aria-current={isActive ? "page" : undefined}
+                      className={`flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-medium border transition-all duration-300 ${
+                        isActive
+                          ? "text-[var(--accent)] bg-[var(--accent-soft)] border-[var(--accent)]/30"
+                          : "text-[var(--text-muted)] border-transparent hover:text-[var(--accent)] hover:bg-[var(--accent-soft)]"
+                      }`}
+                    >
+                      <span>{link.label}</span>
+
+                      <ArrowUpRight
+                        size={14}
+                        className={
+                          isActive ? "text-[var(--accent)]" : "opacity-60"
+                        }
+                      />
+                    </a>
+                  );
+                })}
               </nav>
             </motion.div>
           )}
